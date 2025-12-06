@@ -1,0 +1,7 @@
+/bin/
+/headers/
+/obj/
+/responses/
+/syn/
+config.json
+tsweb-cli.sln
