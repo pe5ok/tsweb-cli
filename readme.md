@@ -12,17 +12,18 @@
 -ll --list-compilers //список компиляторов
 -s --submit <file_path> //отправить посылку
 -ls --list-submits //список посылок
--d //режим дебага(выводится нативный HTML)
+-d --debug //режим дебага(выводится нативный HTML)
 ```
 ## build
 `man dotnet`
 
 ## to-do
 - шифрование cookie в config.json
-- сокрытие пароля при вводе
+- ~~сокрытие пароля при вводе~~
 - улучшение обработки ввода пользователя
 - мультиплатформа для config.json
 - получение условий в pdf
+- разобраться с AOT/self-contained/trimmed сборкой
 
 ## contribution
 pull requests and issues are welcome
