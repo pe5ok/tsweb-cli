@@ -1,16 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Formats.Asn1;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 public class TsWebCli : IDisposable
 {
     private static string host = "tsweb.ru", proto = "https";
@@ -64,7 +59,7 @@ public class TsWebCli : IDisposable
         conf = new Config();
         mode = conf.Get("mode") ?? "t";
         uri = $"{proto}://{host}/{mode}";
-        cookie = conf.Get("cookie");
+        cookie = conf.Get("cookie")??"none";
         hc.DefaultRequestHeaders.Add("Cookie", cookie);
     }
     public async Task<int> Login()
@@ -72,11 +67,28 @@ public class TsWebCli : IDisposable
         Console.Write("Login: ");
         string login = (Console.ReadLine() ?? "").Trim();
         Console.Write("Password: ");
-        string password = (Console.ReadLine() ?? "").Trim();
+        StringBuilder password = new();
+        ConsoleKey key;
+        do
+        {
+            var keyInfo = Console.ReadKey(intercept: true);
+            key = keyInfo.Key;
+            if (key == ConsoleKey.Backspace && password.Length > 0)
+            {
+                Console.Write("\b \b");
+                password.Remove(password.Length-1, 1);
+            }
+            else if (!char.IsControl(keyInfo.KeyChar))
+            {
+                Console.Write("*");
+                password.Append(keyInfo.KeyChar);
+            }
+        } while (key != ConsoleKey.Enter); 
+        Console.WriteLine();
         var form = new FormUrlEncodedContent(new Dictionary<string, string>{
                 ["op"] = "login",
                 ["team"] = login,
-                ["password"] = password
+                ["password"] = password.ToString()
             }
         );
         string content = await EnsureParse(await hc.PostAsync($"{uri}/index", form));

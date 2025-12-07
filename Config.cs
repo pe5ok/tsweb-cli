@@ -6,7 +6,10 @@ using System.Text.Json.Nodes;
 public class Config:IDisposable
 {
     private JsonObject config_data;
-    private string file_path = "config.json";
+    private string file_path = Path.Combine((OperatingSystem.IsWindows())?(
+        Path.Combine(Environment.GetEnvironmentVariable("HOMEDRIVE")!,
+        Environment.GetEnvironmentVariable("HOMEPATH")!)
+    ):(Environment.GetEnvironmentVariable("HOME")!),".tsweb.json");
     public Config()
     {
         if (!File.Exists(file_path))

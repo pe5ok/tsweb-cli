@@ -71,7 +71,7 @@ class Program
             }
             catch(Exception e)
             {
-                Console.Write(e.Message);
+                Console.WriteLine(e.Message);
                 return;
             }
         }
